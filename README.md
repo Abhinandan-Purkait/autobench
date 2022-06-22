@@ -13,7 +13,7 @@ python3 setup.py install
 NOTE: Needs Root Privileges.
 
 ```
-root@pop-os:/home/septimius/github.com/Abhinandan-Purkait/autobench# autobench
+root@pop-os:/home/septimius# autobench
 Usage: autobench [OPTIONS] COMMAND [ARGS]...
 
 Options:
@@ -21,8 +21,10 @@ Options:
 
 Commands:
   create-lvm-stack
+  create-spdk-stack
   expose-lvm-stack
+  expose-spdk-stack
   remove-lvm-stack
+  remove-spdk-stack
   run-performance-test
-
 ```
