@@ -192,6 +192,7 @@ def run_performance_test(dev_paths, runtime, block_size, io_pattern, size):
                '--ioengine=libaio', '--iodepth=64', '--runtime=' + runtime, '--numjobs=4', '--time_based',
                '--group_reporting', '--name=iops-test-job', '--eta-newline=1', '--output-format=json']
 
+        print("Running fio benchmark for "+x+" ....")
         output = subprocess.run(cmd, capture_output=True)
         x = json.loads(output.stdout)
 
@@ -229,15 +230,18 @@ def run_performance_test(dev_paths, runtime, block_size, io_pattern, size):
 
         ticks.append(x["disk_util"][0]["name"])
 
+    print("Generating graphs ....")
     make_graph(min_r_ops, max_r_ops, mean_r_ops, ticks, "read.png", "READ IOPS", "Inout/Output per second")
-    make_graph(min_r_slat, min_r_slat, min_r_slat, ticks, "rslat.png", "READ SUBMISSION LATENCY", "nanosecond")
-    make_graph(min_r_clat, min_r_clat, min_r_clat, ticks, "rclat.png", "READ COMPLETION LATENCY", "nanosecond")
-    make_graph(min_r_lat, min_r_lat, min_r_lat, ticks, "rlat.png", "READ TOTAL LATENCY", "nanosecond")
+    make_graph(min_r_slat, max_r_slat, mean_r_slat, ticks, "rslat.png", "READ SUBMISSION LATENCY", "nanosecond")
+    make_graph(min_r_clat, max_r_clat, mean_r_clat, ticks, "rclat.png", "READ COMPLETION LATENCY", "nanosecond")
+    make_graph(min_r_lat, max_r_lat, mean_r_lat, ticks, "rlat.png", "READ TOTAL LATENCY", "nanosecond")
 
     make_graph(min_w_ops, max_w_ops, mean_w_ops, ticks, "write.png", "WRITE IOPS", "Inout/Output per second")
-    make_graph(min_w_slat, min_w_slat, min_w_slat, ticks, "wslat.png", "WRITE SUBMISSION LATENCY", "nanosecond")
-    make_graph(min_w_clat, min_w_clat, min_w_clat, ticks, "wclat.png", "WRITE COMPLETION LATENCY", "nanosecond")
-    make_graph(min_w_lat, min_w_lat, min_w_lat, ticks, "wlat.png", "WRITE TOTAL LATENCY", "nanosecond")
+    make_graph(min_w_slat, max_w_slat, mean_w_slat, ticks, "wslat.png", "WRITE SUBMISSION LATENCY", "nanosecond")
+    make_graph(min_w_clat, max_w_clat, mean_w_clat, ticks, "wclat.png", "WRITE COMPLETION LATENCY", "nanosecond")
+    make_graph(min_w_lat, max_w_lat, mean_w_lat, ticks, "wlat.png", "WRITE TOTAL LATENCY", "nanosecond")
+
+    print("Done 🚀")
 
 
 @cli.command()
